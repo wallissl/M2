@@ -18,30 +18,69 @@ app.get('/bemvindo', (request, response) => {
     response.send("Bem vindo usuário")
 })
 
-app.post('/pets', (request, response) =>{
-    const dados = request.body // Capturar as informações que vem do body
-    console.log(dados) // Só para visualizar as informações enviadas no terminal
+//Rota de vacinas
+app.post('/vacinas', async (request, response) => {
 
-    conexao.query(
-        `INSERT INTO pets
+    const dados = request.body
+
+    if(!dados.nome || !dados.descricao || !dados.dose){
+        return response.status(400).json({mensagem:'Nome, descrição e dose são obrigatorios'})
+    }
+
+    await conexao.query(`
+        
+        INSERT INTO vacinas
         (
         nome,
-        idade,
-        raca,
-        tipo,
-        responsavel
+        descricao,
+        dose
         )
         values
         (
-            '${dados.nome}',
-            '${dados.idade}',
-            '${dados.raca}',
-            '${dados.tipo}',
-            '${dados.responsavel}'        
-        )`
-    );
+            $1,
+            $2,
+            S3
+        )
+        `,[dados.nome, dados.descricao, dados.dose]);
+
+        response.status(201).json({mensagem:'Vacina criada com sucesso'})
+})
+
+
+app.post('/pets', async (request, response) =>{
+
+    try{
+        const dados = request.body // Capturar as informações que vem do body
+        console.log(dados) // Só para visualizar as informações enviadas no terminal
     
-    response.send('Entrei aqui')
+        if(!dados.nome || !dados.tipo || !dados.idade || !dados.raca){
+            return response.status(400).json({mensagem:'O nome, o tipo, a idade e a raça são obrigatórios'})
+        } // Utilizado para validar se as informações do nome chegaram e se estão corretas, caso não estejam o return faz o código parar por aqui mesmo.
+    
+        await conexao.query(
+            `INSERT INTO pets
+            (
+            nome,
+            idade,
+            raca,
+            tipo,
+            responsavel
+            )
+            values
+            (
+                $1,
+                $2,
+                $3,
+                $4,
+                $5,       
+            )`, [dados.nome, dados.idade, dados.raca, dados.tipo, dados.responsavel]
+        );
+        
+        response.status(201).json({mensagem: 'Criado com sucesso'}) // TESTAR ESSE CÓDIGO NO BANCO E POSTMAN
+
+    }catch{
+        response.status(500).json({mensagem: 'Não foi possível cadastrar o pet'})
+    }
 })
 
 
