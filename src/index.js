@@ -21,7 +21,9 @@ app.get('/bemvindo', (request, response) => {
 //Rota de vacinas
 app.post('/vacinas', async (request, response) => {
 
-    const dados = request.body
+    try {
+
+        const dados = request.body
 
     if(!dados.nome || !dados.descricao || !dados.dose){
         return response.status(400).json({mensagem:'Nome, descrição e dose são obrigatorios'})
@@ -44,6 +46,27 @@ app.post('/vacinas', async (request, response) => {
         `,[dados.nome, dados.descricao, dados.dose]);
 
         response.status(201).json({mensagem:'Vacina criada com sucesso'})
+
+        
+    } catch {
+        
+        response.status(500).json({mensagem: 'Não foi possível cadastrar a vacina'})
+
+    }
+
+    
+})
+
+// Criação do método listar
+
+app.get("/pets", async (request, response) => {
+
+    // Pegar uma informação do query params no get
+    const dados = request.query
+    console.log(dados)
+
+   const pets = await conexao.query("SELECT * from pets")
+   response.status(200).json(pets.rows)
 })
 
 
