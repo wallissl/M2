@@ -41,7 +41,7 @@ app.post('/vacinas', async (request, response) => {
         (
             $1,
             $2,
-            S3
+            $3
         )
         `,[dados.nome, dados.descricao, dados.dose]);
 
@@ -65,8 +65,15 @@ app.get("/pets", async (request, response) => {
     const dados = request.query
     console.log(dados)
 
-   const pets = await conexao.query("SELECT * from pets")
+    if(dados.nome){
+
+   const pets = await conexao.query("SELECT * from pets where nome ilike $1", [`%${dados.nome}%`]) // ilike utilizado para buscar, caracter curinga
+
    response.status(200).json(pets.rows)
+    } else{
+        const pets = await conexao.query("SELECT * from pets");
+        response.status(200).json(pets.rows)
+    }
 })
 
 
