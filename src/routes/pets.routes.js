@@ -1,6 +1,66 @@
-const  {Router} = require('express')
+const  {Router} = require('express');
+const PetController = require('../controllers/PetController');
+
+const { Pool } = require('pg') // Importei o Pool novamente para testar nesse arquivo.
 
 const petsRoutes = new Router();
+
+// Chamar a variável que vem do Pool para conexão com o banco de dados
+const conexao = new Pool({
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password:'#',
+    database:'api_pets'
+})
+
+// Criação do método de atualizar
+
+petsRoutes.put("/:id", async (request, response) => {
+    const dados = request.body; // pegar o dados do body
+    const id = request.params.id // dados do id params
+
+    const dadosDoPet = await conexao.query('SELECT * FROM pets where id = $1', [id]) // Pegar todos os dados do banco para verificar o que já existe na hora de atualizar.
+    
+    conexao.query(`UPDATE pets
+        set nome = $1,
+        idade = $2,
+        raca = $3,
+        tipo = $4,
+        responsavel = $5
+        where id = $6 `, [
+            dados.nome || dadosDoPet.rows[0].nome,
+            dados.idade || dadosDoPet.rows[0].idade,
+            dados.raca || dadosDoPet.rows[0].raca,
+            dados.tipo || dadosDoPet.rows[0].tipo,
+            dados.responsavel || dadosDoPet.rows[0].responsavel,
+             id
+        ]
+    )
+
+    response.json({mensagem: 'Atualizado com sucesso'})
+})
+
+// Criação do método de listar apenas 1
+
+petsRoutes.get('/:id' , async (request, response) => {
+
+    try {
+        const id = request.params.id
+
+    const pet = await conexao.query("SELECT * from pets where id = $1", [id])
+
+    if(pet.rows.length === 0){
+        return response.status(404).json({mensagem: 'Não foi possível encontrar um pet com esse ID.'})
+    }
+
+    response.json(pet.rows[0])
+        
+    } catch {
+        response.status(500).json({mensagem: 'Não foi possível localizar o item'})
+    }
+    
+})
 
 
 // Criação do método delete
@@ -33,39 +93,7 @@ petsRoutes.get("/", async (request, response) => {
     }
 })
 
+/* 
+petsRoutes.post('/', PetController.criar) */
 
-petsRoutes.post('/', async (request, response) =>{
-
-    try{
-        const dados = request.body // Capturar as informações que vem do body
-        console.log(dados) // Só para visualizar as informações enviadas no terminal
-    
-        if(!dados.nome || !dados.tipo || !dados.idade || !dados.raca){
-            return response.status(400).json({mensagem:'O nome, o tipo, a idade e a raça são obrigatórios'})
-        } // Utilizado para validar se as informações do nome chegaram e se estão corretas, caso não estejam o return faz o código parar por aqui mesmo.
-    
-        await conexao.query(
-            `INSERT INTO pets
-            (
-            nome,
-            idade,
-            raca,
-            tipo,
-            responsavel
-            )
-            values
-            (
-                $1,
-                $2,
-                $3,
-                $4,
-                $5,       
-            )`, [dados.nome, dados.idade, dados.raca, dados.tipo, dados.responsavel]
-        );
-        
-        response.status(201).json({mensagem: 'Criado com sucesso'}) // TESTAR ESSE CÓDIGO NO BANCO E POSTMAN
-
-    }catch{
-        response.status(500).json({mensagem: 'Não foi possível cadastrar o pet'})
-    }
-})
+module.exports = petsRoutes

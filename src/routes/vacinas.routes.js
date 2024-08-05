@@ -1,10 +1,18 @@
 const {Router} = require('express')
-
+const { Pool } = require('pg') // Importei o Pool novamente para testar nesse arquivo.
 const vacinasRoutes = new Router()
 
 
+const conexao = new Pool({
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password:'#',
+    database:'api_pets'
+})
+
 //Rota de vacinas
-vacinasRoutes.post('/vacinas', async (request, response) => {
+vacinasRoutes.post('/', async (request, response) => {
 
     try {
 
