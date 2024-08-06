@@ -1,3 +1,13 @@
+const {Pool} = require('pg')
+
+const conexao = new Pool({
+    host: 'localhost',
+    port: 5432,
+    user: 'postgres',
+    password: 'senai',
+    database: 'api_pets'
+})
+
 class PetController{
 
     async criar (request, response) {
@@ -10,7 +20,7 @@ class PetController{
                 return response.status(400).json({mensagem:'O nome, o tipo, a idade e a raça são obrigatórios'})
             } // Utilizado para validar se as informações do nome chegaram e se estão corretas, caso não estejam o return faz o código parar por aqui mesmo.
         
-            await conexao.query(
+            const servico = await conexao.query(
                 `INSERT INTO pets
                 (
                 nome,
@@ -25,11 +35,11 @@ class PetController{
                     $2,
                     $3,
                     $4,
-                    $5,       
-                )`, [dados.nome, dados.idade, dados.raca, dados.tipo, dados.responsavel]
+                    $5       
+                )returning *`, [dados.nome, dados.idade, dados.raca, dados.tipo, dados.responsavel]
             );
             
-            response.status(201).json({mensagem: 'Criado com sucesso'}) // TESTAR ESSE CÓDIGO NO BANCO E POSTMAN
+            response.status(201).json(servico.rows[0]) // TESTAR ESSE CÓDIGO NO BANCO E POSTMAN
     
         }catch{
             response.status(500).json({mensagem: 'Não foi possível cadastrar o pet'})
@@ -38,4 +48,4 @@ class PetController{
 
 }
 
-module.exports = PetController
+module.exports = new PetController()
