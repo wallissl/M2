@@ -10,7 +10,7 @@ const conexao = new Pool({
     host: 'localhost',
     port: 5432,
     user: 'postgres',
-    password:'#',
+    password:'senai',
     database:'api_pets'
 })
 
@@ -62,7 +62,6 @@ petsRoutes.get('/:id' , async (request, response) => {
     
 })
 
-
 // Criação do método delete
 
 petsRoutes.delete("/:id", (request, response) => {
@@ -93,7 +92,7 @@ petsRoutes.get("/", async (request, response) => {
     }
 })
 
-/* 
-petsRoutes.post('/', PetController.criar) */
+
+petsRoutes.post("/", PetController.criar)
 
 module.exports = petsRoutes
