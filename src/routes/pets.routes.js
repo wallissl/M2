@@ -62,7 +62,6 @@ petsRoutes.get('/:id' , async (request, response) => {
     
 })
 
-
 // Criação do método delete
 
 petsRoutes.delete("/:id", (request, response) => {

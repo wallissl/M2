@@ -15,7 +15,8 @@ class ServicoController {
 
     async listarTodos(request, response){
 
-        // Buscar através do query params
+        try {
+            // Buscar através do query params
 
         const query = request.query
         
@@ -34,11 +35,36 @@ class ServicoController {
         const servicos = await conexao.query("select * from servicos");
         response.json(servicos.rows)
         }
-
-        
-
+        } catch {
+            response.status(500).json({mensagem: 'Não foi possível listar os serviços'})
+        }
     }
 
+    async listarUm (request, response){
+
+        try {
+
+        // Listar um
+        const id = request.params.id
+
+        const servico = await conexao.query(`
+            select * from servicos
+            where id = $1
+            `, [id]
+        )
+
+        if(servico.rowCount === 0){
+            return response.status(404).json({mensagem: 'Não foi encontrado o serviço'})
+        }
+
+        response.json(servico.rows[0])
+
+        }catch{
+
+            response.status(500).json({mensagem: 'Não foi possível listar o serviço'})      
+        }
+        
+    }
 
     async criar(request, response){
 
@@ -67,7 +93,54 @@ class ServicoController {
         } catch {
             response.status(500).json({mensagem: 'Não foi possível cadastrar o serviço'})
         }  
-    } 
+    }
+
+    async deletar(request, response){
+        try {
+            const id = request.params.id
+           const servico = await conexao.query(`
+                DELETE FROM servicos
+                where id = $1`, [id])
+
+                if(servico.rowCount == 0){
+                    return response.status(404).json({mensagem: 'Informação não encontrada pelo ID'})
+                }
+
+                response.status(204).json()
+        } catch{
+            response.status(500).json({mensagem: 'Não foi possível deletar o serviço'})
+        }
+    }
+
+    async atualizar(request, response){
+        
+        try {
+            const dados = request.body
+            const id = request.params.id
+
+            const dadosDoServico = await conexao.query(`
+                    select * from servicos
+                    where id = $1
+                `, [id])
+
+            await conexao.query(`
+                    update servicos
+                    set nome = $1,
+                    descricao = $2,
+                    preco = $3
+                    where id =$4
+                `, [dados.nome || dadosDoServico.rows[0].nome,
+                    dados.descricao || dadosDoServico.rows[0].descricao,
+                    dados.preco || dadosDoServico.rows[0].preco,
+                    id])
+
+                response.json({mensagem: 'Atualizado com sucesso'})
+
+        } catch (error) {
+            response.status(500).json({mensagem: 'Não foi possível atualizar o serviço'})
+        }
+
+    }
 }
 
 module.exports = new ServicoController()
