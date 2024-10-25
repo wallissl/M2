@@ -1,4 +1,4 @@
-require('dotenv').config()
+/* require('dotenv').config() */ // Esse arquivo foi parar na pasta de configurações.
 const express = require("express");
 const cors = require("cors");
 const routes = require('./routes/routes');
@@ -9,18 +9,18 @@ const PORT_API = process.env.PORT_API // O último PORT_API é o nome da minha v
 class Server {
     constructor ( server = express() ) {
      
-        this.middlewares(server)
-        this.database()
-        server.use(routes)
-        this.initializeServer(server) 
+        this.middlewares(server) // Aplica os middlewares
+        this.database() // Inicia o banco de dados
+        server.use(routes) // Liga as rotas - Registra no express
+        this.initializeServer(server) // Inicia o servidor
     }
 
-    async middlewares(app){
+    async middlewares(app){ 
         console.log("Executando os middlewares...")
-        app.use(cors())
-        app.use(express.json())
+        app.use(cors()) // Para trabalhar com chamadas https de outros ips 
+        app.use(express.json()) // Para trabalhar com json
         console.log("Middlewares inicializados!")
-    }
+    } // São funções que ficam entre a requisição e a resposta.
 
     async database(){
         try {
