@@ -9,11 +9,11 @@ responsaveisRoutes.post('/', async (request, response) => {
         const {nome, idade, sexo, email, senha} = request.body;
 
     const responsavel = await Responsavel.create({
-        nome,
-        idade,
-        sexo,
-        email,
-        senha
+        nome: dados.nome,
+        idade: dados.idade,
+        sexo: dados.sexo,
+        email: dados.email,
+        senha: dados.senha
     });
 
     return response.json(responsavel);
