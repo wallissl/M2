@@ -4,8 +4,11 @@ const {Router}= require('express')
 const vacinasRoutes = require('./vacinas.routes'); //Importando o arquivo da rota de vacinas
 const servicosRoutes = require('./servicos.routes');
 const pedidosRoutes = require('./pedidos.routes') */
+const responsaveisRoutes = require('./responsaveis.routes')
 
 const routes = new Router()
+
+routes.use('/responsaveis', responsaveisRoutes)
 
 // Utilizando as rotas importadas
 /* routes.use('/pets', petsRoutes); // o /pets é o endpoint
