@@ -12,7 +12,7 @@ const conexao = new Pool({
 
 class ServicoController {
 
-
+    
     async listarTodos(request, response){
 
         try {
