@@ -1,5 +1,6 @@
 const Usuario = require("../models/Usuario");
 const {compareSync} = require('bcryptjs');
+const {sign} = require("jsonwebtoken");
 
 
 class LoginController{
@@ -36,7 +37,19 @@ class LoginController{
             .json({mensagem: 'Conta não encontradaa'})
         }
 
-        response.json({mensagem: 'Login realizado'})
+        const token = sign({
+            id: usuario.id
+        },
+        process.env.SECRET_JWT,
+        {
+            expiresIn: '1d'
+        }
+    )
+
+        response.json({
+        token: token, 
+        nome: usuario.nome,
+        mensagem: 'Login realizado'})
     }
 
 }
