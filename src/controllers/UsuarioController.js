@@ -35,10 +35,15 @@ class UsuarioController {
 
         const usuario = await Usuario.create({
             ...dados,
-            password_hash: dados.password
+            password_hash: dados.password 
+            
         })
 
-        response.status(201).json({usuario})
+        response.status(201).json({
+            nome: usuario.nome,
+            createdAt: usuario.createdAt,
+            updatedAt: usuario.updatedAt
+        })
         }            
         catch (error) {
             console.log(error)
