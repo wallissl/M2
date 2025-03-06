@@ -81,6 +81,7 @@ class CursoController {
 
         try {
             
+            console.log(request.userId);
             const dados = request.body;
             // Aqui poderá entrar a parte de validação
             const curso = await Curso.create(dados);
