@@ -1,6 +1,8 @@
 const { DataTypes } = require('sequelize')
 const connection = require('../database/connection')
 const {hashSync} = require('bcryptjs')
+const Permissao = require('./Permissao')
+const UsuarioPermissoes = require('./UsuarioPermissoes')
 
 const Usuario = connection.define("usuarios", {
     nome: {
@@ -13,6 +15,11 @@ const Usuario = connection.define("usuarios", {
         type: DataTypes.STRING
     }
 })
+
+//Ligação com outras tabelas
+
+Permissao.belongsToMany(Usuario, {through: UsuarioPermissoes})
+Usuario.belongsToMany(Permissao, {through: UsuarioPermissoes})
 
 Usuario.beforeSave((usuario) => {
     usuario.password_hash = hashSync(usuario.password_hash, 10)
