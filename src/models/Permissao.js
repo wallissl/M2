@@ -3,7 +3,7 @@ const connection = require("../database/connection");
 
 
 const Permissao = connection.define('Permissao', {
-    description: DataTypes.STRING
+    descricao: DataTypes.STRING
 });
 
 module.exports = Permissao;

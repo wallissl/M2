@@ -1,12 +1,13 @@
 const {Router} = require('express');
 const cursoController = require('../controllers/cursoController');
 const validaToken = require('../middlewares/validaToken');
+const verificarPermissao = require('../middlewares/verificarPermissao');
 
 const cursosRoutes = new Router();
 
-cursosRoutes.post('/', validaToken, cursoController.criar);
-cursosRoutes.get('/', cursoController.buscarTodos);
-cursosRoutes.delete('/:id', cursoController.deletar);
+cursosRoutes.post('/', verificarPermissao(['criarCurso']), validaToken, cursoController.criar); // 'Criar curso'
+cursosRoutes.get('/', verificarPermissao(['listarCurso']),cursoController.buscarTodos); // 'Listar curso'
+cursosRoutes.delete('/:id', verificarPermissao(['listarCurso', 'deletarCurso']), cursoController.deletar);
 cursosRoutes.put('/:id', cursoController.atualizar);
 cursosRoutes.get('/:id', cursoController.buscarUm);
 

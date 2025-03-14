@@ -1,5 +1,7 @@
 const Permissao = require('../models/Permissao');
 
+// Feito para testar.
+
 class PermissaoController {
   
 // Método criar
@@ -19,6 +21,22 @@ async criar(request, response) {
             })
         }
     }
+
+// Método Listar
+
+async listar(request, response) {
+
+    try {
+
+        const permissoes = await Permissao.findAll();
+        response.json(permissoes)
+
+    } catch (error) {
+        response.status(500).json({
+            mensagem: "Houve um erro ao listar as permissões"
+        })
+    }
+} 
 
 // Método delete
 async deletar(request, response){
@@ -46,3 +64,5 @@ async deletar(request, response){
 }
 
 }
+
+module.exorts = new PermissaoController();

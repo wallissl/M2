@@ -12,11 +12,8 @@ routes.use('/usuarios', usuariosRoutes);
 routes.post('/login', LoginController.login);
 
 routes.use(auth) // Tudo que estiver abaixo só será acessado se o usuário tiver o token.
+
 routes.use('/responsaveis', responsaveisRoutes);
 routes.use('/cursos', cursosRoutes);
-
-
-
-
 
 module.exports = routes
