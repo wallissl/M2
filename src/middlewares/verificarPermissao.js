@@ -1,5 +1,6 @@
 const { request } = require("express");
 
+
 const verificarPermissao = (permissoesRequeridas) => {
   return async (request, response, next) => {
     try{

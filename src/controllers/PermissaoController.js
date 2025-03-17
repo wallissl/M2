@@ -9,13 +9,14 @@ async criar(request, response) {
 
         try {
         
-            const descricao = request.body.descricao;
+            const descricao = request.body;
             // Aqui poderá entrar a parte de validação
 
             const permissao = await Permissao.create(descricao);
-            return response.status(201).json(permissao)
+            response.status(201).json(permissao)
 
         } catch (error) {
+            console.log(error)
             response.status(500).json({
                 mensagem: "Houve um erro ao cadastrar a permissão"
             })
@@ -28,10 +29,10 @@ async listarTodos(request, response) {
 
     try {
 
-        const descricao = request.body.descricao;
+      /*   const descricao = request.body.descricao; */
 
-        const permissoes = await Permissao.findAll(descricao);
-        return response.json(permissoes)
+        const permissoes = await Permissao.findAll();
+        response.json(permissoes)
 
     } catch (error) {
         response.status(500).json({
@@ -44,7 +45,6 @@ async listarTodos(request, response) {
 async deletar(request, response){
 
     try {
-
         const id = request.params.id;
         const permissao = await Permissao.findByPk(id);
 

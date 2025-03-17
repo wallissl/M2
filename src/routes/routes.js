@@ -7,6 +7,7 @@ const LoginController = require('../controllers/LoginController');
 /* const auth = require('../middlewares/validaToken'); */
 
 const validaToken = require('../middlewares/validaToken');
+const verificarPermissao = require('../middlewares/verificarPermissao');
 
 
 
