@@ -1,10 +1,10 @@
 const { request } = require("express");
 
 const verificarPermissao = (permissoesRequeridas) => {
-  return (request, response, next) => {
+  return async (request, response, next) => {
     try{
         const { usuarioId } = request
-        const usuario =  Usuario.findByPk(usuarioId, {
+        const usuario =  await Usuario.findByPk(usuarioId, {
             include: {
                 model: Permissao,
                 through: {

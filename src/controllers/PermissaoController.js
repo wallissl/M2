@@ -1,5 +1,5 @@
 const Permissao = require('../models/Permissao');
-
+const Usuario = require('../models/Usuario');
 // Feito para testar.
 
 class PermissaoController {
@@ -24,12 +24,14 @@ async criar(request, response) {
 
 // Método Listar
 
-async listar(request, response) {
+async listarTodos(request, response) {
 
     try {
 
-        const permissoes = await Permissao.findAll();
-        response.json(permissoes)
+        const descricao = request.body.descricao;
+
+        const permissoes = await Permissao.findAll(descricao);
+        return response.json(permissoes)
 
     } catch (error) {
         response.status(500).json({
@@ -44,7 +46,7 @@ async deletar(request, response){
     try {
 
         const id = request.params.id;
-        const permissao = await permissao.findByPk(id);
+        const permissao = await Permissao.findByPk(id);
 
         if(!permissao){
             return response.status(404).json({
@@ -63,6 +65,32 @@ async deletar(request, response){
     }
 }
 
+async atribuirPermissao(request, response){
+
+    try {
+
+        const { usuarioId, permissaoId } = request.body;
+
+        const usuario = await Usuario.findByPk(usuarioId);
+        const permissao = await Permissao.findByPk(permissaoId);
+
+        if(!usuario || !permissao){
+            return response.status(404).json({
+                mensagem: "Usuário ou permissão não encontrados"
+            })
+        }
+
+        await usuario.addPermissao(permissao);
+
+        response.status(204).json()
+
+    } catch (error) {
+            response.status(500).json({
+                mensagem: "Houve um erro ao atribuir permissão"
+            })
+        }
+    }
+
 }
 
-module.exorts = new PermissaoController();
+module.exports = new PermissaoController();
