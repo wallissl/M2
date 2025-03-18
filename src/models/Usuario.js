@@ -19,6 +19,7 @@ const Usuario = connection.define("usuarios", {
 //Ligação com outras tabelas
 
 Permissao.belongsToMany(Usuario, {through: UsuarioPermissoes})
+
 Usuario.belongsToMany(Permissao, {through: UsuarioPermissoes})
 
 Usuario.beforeSave((usuario) => {

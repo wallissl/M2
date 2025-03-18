@@ -68,7 +68,7 @@ async deletar(request, response){
 async atribuirPermissao(request, response){
 
     try {
-
+        console.log(request.body);
         const { usuarioId, permissaoId } = request.body;
 
         const usuario = await Usuario.findByPk(usuarioId);

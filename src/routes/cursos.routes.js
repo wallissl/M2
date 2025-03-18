@@ -5,7 +5,7 @@ const verificarPermissao = require('../middlewares/verificarPermissao');
 
 const cursosRoutes = new Router();
 
-cursosRoutes.post('/',verificarPermissao(['criarCurso']), validaToken, cursoController.criar); // 'Criar curso'
+cursosRoutes.post('/',verificarPermissao(['criarCurso']), cursoController.criar); // 'Criar curso'
 cursosRoutes.get('/', verificarPermissao(['listarCurso']),cursoController.buscarTodos); // 'Listar curso'
 cursosRoutes.delete('/:id', verificarPermissao(['listarCurso', 'deletarCurso']), cursoController.deletar);
 cursosRoutes.put('/:id', cursoController.atualizar);
