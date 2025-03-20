@@ -18,9 +18,21 @@ const Usuario = connection.define("usuarios", {
 
 //Ligação com outras tabelas
 
-Permissao.belongsToMany(Usuario, {through: UsuarioPermissoes})
 
-Usuario.belongsToMany(Permissao, {through: UsuarioPermissoes})
+Usuario.belongsToMany(Permissao, {
+    through: UsuarioPermissoes,
+    foreignKey: 'usuarioId',
+    otherKey: 'permissaoId'
+});
+
+/* Permissao.belongsToMany(Usuario, {
+    through: UsuarioPermissoes,
+    foreignKey: 'permissaoId',
+    otherKey: 'usuarioId'
+}); */ // Caso fosse necessário a ligação inversa.
+
+/* Permissao.belongsToMany(Usuario, {through: UsuarioPermissoes}) */
+
 
 Usuario.beforeSave((usuario) => {
     usuario.password_hash = hashSync(usuario.password_hash, 10)

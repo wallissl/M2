@@ -80,11 +80,12 @@ async atribuirPermissao(request, response){
             })
         }
 
-        await usuario.addPermissao(permissao);
+        await usuario.addPermissoes(permissao);
 
         response.status(204).json()
 
     } catch (error) {
+        console.log(error)
             response.status(500).json({
                 mensagem: "Houve um erro ao atribuir permissão"
             })
