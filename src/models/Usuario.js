@@ -23,7 +23,7 @@ Usuario.belongsToMany(Permissao, {
     through: UsuarioPermissoes,
     foreignKey: 'usuarioId',
     otherKey: 'permissaoId'
-});
+}); // Aqui nós temos primeiro - Qual tabela se relaciona com qual, qual é a tabela pivô, qual é a chave estrangeira da tabela atual, e qual é a chave estrangeira da outra tabela.
 
 /* Permissao.belongsToMany(Usuario, {
     through: UsuarioPermissoes,
