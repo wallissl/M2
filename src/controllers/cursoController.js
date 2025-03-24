@@ -82,10 +82,11 @@ class CursoController {
         try {
             
             console.log(request.userId);
-            const dados = request.body;
+            const dados = request.body; 
             // Aqui poderá entrar a parte de validação
             const curso = await Curso.create(dados);
-            return response.status(201).json(curso)
+            response.status(201).json(curso);
+
 
         } catch (error) {
             response.status(500).json({
@@ -119,6 +120,31 @@ class CursoController {
         }
         
     }
+
+    //buscar por parâmetro
+
+    async listarPorParametro(request, response){
+
+        try {
+            
+            const {nome} = request.query;
+
+            const cursos = await Curso.findAll({
+                where: {
+                    nome: nome
+                }
+            });
+
+            response.json(cursos);
+
+        } catch (error) {
+            response.status(500).json({
+                mensagem: "Não foi possível localizar os cursos"
+            })
+        }
+    }
+
+
 
 }
 

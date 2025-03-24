@@ -11,32 +11,33 @@ module.exports = {
         autoIncrement: true
       },
 
-      usuario_id: {
+      usuarioId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: 'usuarios',
-          key: 'id'
+          key: 'id',
         },
+      },
 
-      permissao_id: {
+      permissaoId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: 'permissoes',
-          key: 'id'
-        }
+          key: 'id',
+        },
   
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
-      UpdatedAt: {
+      updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
-     }
+        type: Sequelize.DATE,
+      },
+     
     });
   },
 

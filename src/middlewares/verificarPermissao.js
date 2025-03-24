@@ -1,4 +1,7 @@
 const { request } = require("express");
+const Permissao = require("../models/Permissao");
+const Usuario = require("../models/Usuario");
+
 
 const verificarPermissao = (permissoesRequeridas) => {
   return async (request, response, next) => {

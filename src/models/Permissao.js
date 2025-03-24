@@ -8,4 +8,6 @@ const Permissao = connection.define('permissoes', {
     }
 });
 
+
+
 module.exports = Permissao;

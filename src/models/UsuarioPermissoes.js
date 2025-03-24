@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 const connection = require("../database/connection");
 
-const UsuarioPermissoes = connection.define('UsuarioPermissoes', {
-    usuario_id: {
+const UsuarioPermissoes = connection.define('usuario_permissoes', {
+    usuarioId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
@@ -10,7 +10,7 @@ const UsuarioPermissoes = connection.define('UsuarioPermissoes', {
             key: 'id'
         }
     },
-    permissao_id: {
+    permissaoId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
