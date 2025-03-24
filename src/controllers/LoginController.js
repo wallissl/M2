@@ -38,7 +38,8 @@ class LoginController{
         }
 
         const token = sign({
-            id: usuario.id
+            id: usuario.id,
+            email:usuario.email
         },
         process.env.SECRET_JWT,
         {

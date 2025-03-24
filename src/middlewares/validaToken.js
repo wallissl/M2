@@ -19,7 +19,7 @@ function validaToken(request, response, next){
     const resultado = verify(jwt[1], process.env.SECRET_JWT) // Verificar se o token está correto.
     console.log(resultado)
 
-    request.userId = resultado.id
+    request.usuarioId = resultado.id
 
     next()
     console.log(token) // Prosseguir caso o usuário tenha autorização.
